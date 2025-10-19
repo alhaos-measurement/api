@@ -1,0 +1,10 @@
+# measurement api server config file
+
+address: ":8080"
+
+db:
+  host: alhaos.online
+  port: 5432
+  database: measurements
+  user: measurements_owner
+  password: kmsX*c5MBK1d
