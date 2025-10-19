@@ -13,11 +13,12 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.23'
+          go-version: '1.21'
 
       - name: Build Go application
         run: |
-          go build -o measure-api-service cmd/main.go
+          # Собираем для Linux
+          GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
@@ -26,13 +27,16 @@ jobs:
           username: deployer
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            # Останавливаем сервис
             sudo systemctl stop api-service || true
             
-            sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/measure-api-service/
+            sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/api-service/
             sudo cp $GITHUB_WORKSPACE/config/config.yml /opt/measure-api-service/
             
-            sudo chown -R api-service:api-service /opt/measure-api-service/
+            sudo chown -R api-service:api-service /opt/api-service/
             sudo chmod 755 /opt/api-service/measure-api-service
-            sudo find /opt/measure-api-service -type f -name "*.sh" -exec chmod +x {} \;
             
+            sudo systemctl daemon-reload
             sudo systemctl start api-service
+            sleep 5
+            sudo systemctl status api-service
