@@ -1,0 +1,38 @@
+name: Deploy Go API
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.24.3'
+
+      - name: Build Go application
+        run: |
+          go build -o measure-api-service cmd/main.go
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: deployer
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            sudo systemctl stop api-service || true
+            
+            sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/measure-api-service/
+            sudo cp $GITHUB_WORKSPACE/config/config.yml /opt/measure-api-service/
+            
+            sudo chown -R api-service:api-service /opt/measure-api-service/
+            sudo chmod 755 /opt/api-service/measure-api-service
+            sudo find /opt/measure-api-service -type f -name "*.sh" -exec chmod +x {} \;
+            
+            sudo systemctl start api-service
