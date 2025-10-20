@@ -15,7 +15,7 @@ jobs:
           go-version: '1.23'
       - name: Build Go application
         run: | 
-          GOOS=linux run: GOARCH=amd64 go build -o measure-api-service ./cmd/api
+          GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
         with:
