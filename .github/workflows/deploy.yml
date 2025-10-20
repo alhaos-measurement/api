@@ -16,6 +16,14 @@ jobs:
       - name: Build Go application
         run: | 
           GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api/main.go
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: deployer
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "measure-api-service,config/config.yml"
+          target: "/opt/measure-api-service/"
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -24,8 +32,6 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             sudo systemctl stop measure-api-service || true
-            sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/measure-api-service/
-            sudo cp $GITHUB_WORKSPACE/config/config.yml /opt/measure-api-service/
             sudo chown -R measure-api-service:measure-api-service /opt/measure-api-service/
-            sudo chmod 755 /opt/api-service/measure-api-service
+            sudo chmod 755 /opt/measure-api-service
             sudo systemctl start measure-api-service
