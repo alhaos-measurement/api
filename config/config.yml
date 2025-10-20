@@ -3,7 +3,7 @@
 address: ":8080"
 
 db:
-  host: alhaos.online
+  host: localhost
   port: 5432
   database: measurements
   user: measurements_owner
