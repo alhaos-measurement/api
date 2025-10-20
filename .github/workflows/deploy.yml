@@ -9,17 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
-
+          go-version: '1.23'
       - name: Build Go application
-        run: |
-          # Собираем для Linux
-          GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api
-
+        run: | 
+          GOOS=linux run: GOARCH=amd64 go build -o measure-api-service ./cmd/api
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -27,16 +23,9 @@ jobs:
           username: deployer
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            # Останавливаем сервис
-            sudo systemctl stop api-service || true
-            
-            sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/api-service/
+            sudo systemctl stop measure-api-service || true
+            sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/measure-api-service/
             sudo cp $GITHUB_WORKSPACE/config/config.yml /opt/measure-api-service/
-            
             sudo chown -R api-service:api-service /opt/api-service/
             sudo chmod 755 /opt/api-service/measure-api-service
-            
-            sudo systemctl daemon-reload
-            sudo systemctl start api-service
-            sleep 5
-            sudo systemctl status api-service
+            sudo systemctl measure-start api-service
