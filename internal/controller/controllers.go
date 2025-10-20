@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/alhaos-measurement/api/internal/logger"
 	"github.com/alhaos-measurement/api/internal/model"
 	"github.com/alhaos-measurement/api/internal/repository"
 	"github.com/gin-gonic/gin"
@@ -8,12 +9,13 @@ import (
 )
 
 type Controller struct {
-	repo *repository.Repository
+	repo   *repository.Repository
+	logger *logger.Logger
 }
 
 // New construct Controller struct
-func New(repo *repository.Repository) *Controller {
-	return &Controller{repo: repo}
+func New(repo *repository.Repository, logger *logger.Logger) *Controller {
+	return &Controller{repo: repo, logger: logger}
 }
 
 // RegisterRoutes register api routes at router
@@ -47,12 +49,17 @@ func (c *Controller) MeasurePostHandler(ctx *gin.Context) {
 }
 
 func (c *Controller) MeasureGetHandler(context *gin.Context) {
-
-	// get request struct instance
 	var req model.LastSensorMeasure
 	err := context.ShouldBindQuery(&req)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.logger.Error("zero sensor id provided: " + err.Error())
+		return
+	}
+
+	if req.SensorID == 0 {
+		context.JSON(http.StatusBadRequest, gin.H{"error": "sensor_id is required"})
+		c.logger.Error("zero sensor id provided")
 		return
 	}
 

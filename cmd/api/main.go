@@ -49,10 +49,10 @@ func main() {
 	}
 
 	// Init repository
-	repo := repository.New(pool)
+	repo := repository.New(pool, l)
 
 	// Init controller
-	ctrl := controller.New(repo)
+	ctrl := controller.New(repo, l)
 
 	// Init router
 	router := gin.Default()

@@ -1,16 +1,18 @@
 package repository
 
 import (
+	"github.com/alhaos-measurement/api/internal/logger"
 	"github.com/alhaos-measurement/api/internal/model"
 	"github.com/jackc/pgx"
 )
 
 type Repository struct {
-	pool *pgx.ConnPool
+	pool   *pgx.ConnPool
+	logger *logger.Logger
 }
 
-func New(db *pgx.ConnPool) *Repository {
-	return &Repository{pool: db}
+func New(db *pgx.ConnPool, logger *logger.Logger) *Repository {
+	return &Repository{pool: db, logger: logger}
 }
 
 func (r *Repository) AddMeasure(measure *model.Measure) error {
