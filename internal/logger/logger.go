@@ -24,7 +24,7 @@ func New(conf Config) (*Logger, error) {
 		return nil, err
 	}
 
-	errorLogFile, err := os.Create(conf.errorLogFilename)
+	errorLogFile, err := os.OpenFile(conf.errorLogFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, err
 	}

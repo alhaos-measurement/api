@@ -24,7 +24,6 @@ func main() {
 	}
 
 	// Init log
-
 	l, err := logger.New(cfg.Logger)
 	if err != nil {
 		panic(err)
