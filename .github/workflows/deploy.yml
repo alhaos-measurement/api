@@ -24,6 +24,7 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "measure-api-service,config/config.yml"
           target: "/opt/measure-api-service/"
+          overwrite: true
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
         with:
