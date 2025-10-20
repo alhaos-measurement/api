@@ -32,11 +32,7 @@ func TestRepository_GetLastMeasure(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	r := New(pool)
-
-	if err != nil {
-		panic(err)
-	}
+	r := New(pool, nil)
 
 	for _, datum := range data {
 		measure, err := r.GetLastMeasure(datum.sensorID)
@@ -47,10 +43,8 @@ func TestRepository_GetLastMeasure(t *testing.T) {
 	}
 }
 
-func PrintMeasure(measure *model.Measure) {
-	fmt.Printf("Sensor ID: %d\n", measure.SensorID)
-	fmt.Printf("Value: %f\n", measure.Value)
-	fmt.Printf("MeasuredAt: %s\n", measure.MeasuredAt)
+func PrintMeasure(measure *model.MeasureView) {
+	fmt.Printf("Sensor %d\n", measure)
 }
 
 func TestRepository_AddMeasure(t *testing.T) {
@@ -83,7 +77,7 @@ func TestRepository_AddMeasure(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	r := New(pool)
+	r := New(pool, nil)
 
 	for _, datum := range data {
 		err = r.AddMeasure(datum.measure)

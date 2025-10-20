@@ -22,7 +22,7 @@ func New(repo *repository.Repository, logger *logger.Logger) *Controller {
 func (c *Controller) RegisterRoutes(router *gin.Engine) {
 	api := router.Group("/api")
 	{
-		api.POST("/last-measure-by-id", c.MeasureGetHandler)
+		api.POST("/last-measure-by-id", c.lastMeasureByIDPOSTHandler)
 		api.POST("/measure", c.MeasurePostHandler)
 	}
 }
@@ -44,7 +44,7 @@ func (c *Controller) MeasurePostHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, m)
 }
 
-func (c *Controller) MeasureGetHandler(context *gin.Context) {
+func (c *Controller) lastMeasureByIDPOSTHandler(context *gin.Context) {
 	var req model.LastSensorMeasure
 	err := context.ShouldBindJSON(&req)
 	if err != nil {

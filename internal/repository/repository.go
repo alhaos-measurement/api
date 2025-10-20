@@ -50,7 +50,7 @@ VALUES (
 	return nil
 }
 
-func (r *Repository) GetLastMeasure(sensorID int) (*model.Measure, error) {
+func (r *Repository) GetLastMeasure(sensorID int) (*model.MeasureView, error) {
 
 	tx, err := r.pool.Begin()
 	if err != nil {
@@ -82,9 +82,9 @@ SELECT s.name,
     ON m.sensor_id = s.sensor_id`
 	row := tx.QueryRow(query, sensorID)
 
-	var m model.Measure
+	var m model.MeasureView
 
-	err = row.Scan(&m.SensorID, &m.MeasureTypeID, &m.UnitID, &m.Value, &m.MeasuredAt)
+	err = row.Scan(&m.SensorName, &m.MeasureName, &m.UnitName, &m.Value, &m.MeasuredAt)
 	if err != nil {
 		return nil, err
 	}
