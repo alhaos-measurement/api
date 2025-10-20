@@ -15,7 +15,7 @@ jobs:
           go-version: '1.23'
       - name: Build Go application
         run: | 
-          GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api
+          GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api/main.go
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -26,6 +26,6 @@ jobs:
             sudo systemctl stop measure-api-service || true
             sudo cp $GITHUB_WORKSPACE/measure-api-service /opt/measure-api-service/
             sudo cp $GITHUB_WORKSPACE/config/config.yml /opt/measure-api-service/
-            sudo chown -R api-service:api-service /opt/api-service/
+            sudo chown -R measure-api-service:measure-api-service /opt/measure-api-service/
             sudo chmod 755 /opt/api-service/measure-api-service
-            sudo systemctl measure-start api-service
+            sudo systemctl measure-start measure-api-service
