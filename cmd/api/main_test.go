@@ -14,4 +14,5 @@ func TestDummy(t *testing.T) {
 	}
 
 	fmt.Printf("%#v\n", conf)
+
 }
