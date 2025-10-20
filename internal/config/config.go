@@ -1,12 +1,14 @@
 package config
 
 import (
+	"github.com/alhaos-measurement/api/internal/logger"
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type Config struct {
-	Address string `yaml:"address"`
-	DB      DB     `yaml:"db"`
+	Address string        `yaml:"address"`
+	DB      DB            `yaml:"db"`
+	Logger  logger.Config `yaml:"logger"`
 }
 
 type DB struct {

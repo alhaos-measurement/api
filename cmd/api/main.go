@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/alhaos-measurement/api/internal/config"
 	"github.com/alhaos-measurement/api/internal/controller"
+	"github.com/alhaos-measurement/api/internal/logger"
 	"github.com/alhaos-measurement/api/internal/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
@@ -21,6 +22,15 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	// Init log
+
+	l, err := logger.New(cfg.Logger)
+	if err != nil {
+		panic(err)
+	}
+
+	l.Info("start logging")
 
 	// Init connection pool
 	pool, err := pgx.NewConnPool(pgx.ConnPoolConfig{
