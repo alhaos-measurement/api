@@ -1,19 +1,17 @@
 package main
 
 import (
+	"fmt"
+	"github.com/alhaos-measurement/api/internal/config"
 	"testing"
-	"time"
 )
 
 func TestDummy(t *testing.T) {
 
-	t.Log(time.Now().UTC().Format(time.RFC3339))
-
-	ti, err := time.Parse(time.RFC3339, "2025-10-13T07:40:34Z")
+	conf, err := config.New(`C:\repo\alhaos-measurement\api\config\config.yml`)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
 	}
 
-	t.Log(ti.Local().Format(time.RFC3339))
-
+	fmt.Printf("%#v\n", conf)
 }

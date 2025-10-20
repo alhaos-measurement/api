@@ -8,8 +8,8 @@ import (
 )
 
 type Config struct {
-	accessLogFilename string `yaml:"accessLogFilename"`
-	errorLogFilename  string `yaml:"errorLogFilename"`
+	AccessLogFilename string `yaml:"accessLogFilename"`
+	ErrorLogFilename  string `yaml:"errorLogFilename"`
 }
 
 type Logger struct {
@@ -22,12 +22,12 @@ func New(conf Config) (*Logger, error) {
 
 	fmt.Printf("%+v", conf)
 
-	accessLogFile, err := os.OpenFile(conf.accessLogFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	accessLogFile, err := os.OpenFile(conf.AccessLogFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, err
 	}
 
-	errorLogFile, err := os.OpenFile(conf.errorLogFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	errorLogFile, err := os.OpenFile(conf.ErrorLogFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
 		return nil, err
 	}

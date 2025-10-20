@@ -6,7 +6,7 @@ func TestLogger_Info(t *testing.T) {
 
 	cfg := Config{
 		accessLogFilename: "access.log",
-		errorLogFilename:  "error.log",
+		ErrorLogFilename:  "error.log",
 	}
 
 	logger, err := New(cfg)
