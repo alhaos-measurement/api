@@ -22,13 +22,9 @@ func New(repo *repository.Repository, logger *logger.Logger) *Controller {
 func (c *Controller) RegisterRoutes(router *gin.Engine) {
 	api := router.Group("/api")
 	{
-		measure := api.Group("/measure")
-		{
-			measure.GET("/", c.MeasureGetHandler)
-			measure.POST("/", c.MeasurePostHandler)
-		}
+		api.POST("/last-measure-by-id", c.MeasureGetHandler)
+		api.POST("/measure", c.MeasurePostHandler)
 	}
-
 }
 
 // MeasurePostHandler read measure json
