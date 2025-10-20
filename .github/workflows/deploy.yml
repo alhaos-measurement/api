@@ -16,7 +16,7 @@ jobs:
       - name: Build Go application
         run: | 
           GOOS=linux GOARCH=amd64 go build -o build/measure-api-service ./cmd/api/main.go
-      - uses: mdallasanta/ssh-scp-deploy@latest
+      - uses: mdallasanta/ssh-scp-deploy@v1.2.0
         with:
           local: 'build/, config/config.yml'
           remote: '/opt/measure-api-service/'
