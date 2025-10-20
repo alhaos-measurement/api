@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -18,6 +19,8 @@ type Logger struct {
 }
 
 func New(conf Config) (*Logger, error) {
+
+	fmt.Printf("%+v", conf)
 
 	accessLogFile, err := os.OpenFile(conf.accessLogFilename, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 	if err != nil {
