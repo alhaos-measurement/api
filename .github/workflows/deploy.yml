@@ -25,6 +25,7 @@ jobs:
           script: |
             sudo rm -rf /opt/measure-api-service/*
             sudo rmdir /opt/measure-api-service/
+            sudo mkdir /opt/measure-api-service/
       - name: Copy files to server
         uses: appleboy/scp-action@v0.1.3
         with:
