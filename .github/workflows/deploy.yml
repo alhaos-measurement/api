@@ -28,4 +28,4 @@ jobs:
             sudo cp $GITHUB_WORKSPACE/config/config.yml /opt/measure-api-service/
             sudo chown -R measure-api-service:measure-api-service /opt/measure-api-service/
             sudo chmod 755 /opt/api-service/measure-api-service
-            sudo systemctl measure-start measure-api-service
+            sudo systemctl start measure-api-service
