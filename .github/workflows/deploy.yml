@@ -15,24 +15,20 @@ jobs:
           go-version: '1.23'
       - name: Build Go application
         run: | 
-          GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api/main.go
-      - name: Ssh scp ssh pipelines
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+          GOOS=linux GOARCH=amd64 go build -o build/measure-api-service ./cmd/api/main.go
+      - uses: mdallasanta/ssh-scp-deploy@{version}
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          user: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          port: 22
-          connect_timeout: 10s
-          first_ssh: |
+          local: ['build/', 'config/config.yml']
+          remote: '/opt/measure-api-service/'
+          host: ${{secrets.SERVER_HOST}}
+          user: ${{secrets.SERVER_USER}}
+          key: ${{secrets.SERVER_SSH_KEY}}
+          pre_upload: |
             sudo systemctl stop measure-api-service || true
             sudo chown -R ${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_HOST }} /opt/measure-api-service/
             sudo chmod 755 /opt/measure-api-service
             sudo rm -rf /opt/measure-api-service/*
-          scp: |
-            measure-api-service => /opt/measure-api-service/
-            config/config.yml => /opt/measure-api-service/config
-          last_ssh: |
+          post_upload: |
             sudo chown -R measure-api-service:measure-api-service /opt/measure-api-service/
             sudo chmod 755 /opt/measure-api-service
             sudo systemctl start measure-api-service
