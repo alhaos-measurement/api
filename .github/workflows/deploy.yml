@@ -16,7 +16,7 @@ jobs:
       - name: Build Go application
         run: | 
           GOOS=linux GOARCH=amd64 go build -o measure-api-service ./cmd/api/main.go
-      - name: ssh scp ssh pipelines
+      - name: Ssh scp ssh pipelines
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         with:
           host: ${{ secrets.SERVER_HOST }}
