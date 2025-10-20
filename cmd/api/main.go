@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/alhaos-measurement/api/internal/config"
 	"github.com/alhaos-measurement/api/internal/controller"
 	"github.com/alhaos-measurement/api/internal/logger"
@@ -22,6 +23,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Printf("%+v\r", cfg)
 
 	// Init log
 	l, err := logger.New(cfg.Logger)
