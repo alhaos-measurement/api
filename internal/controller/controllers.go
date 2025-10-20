@@ -50,7 +50,7 @@ func (c *Controller) MeasurePostHandler(ctx *gin.Context) {
 
 func (c *Controller) MeasureGetHandler(context *gin.Context) {
 	var req model.LastSensorMeasure
-	err := context.ShouldBindQuery(&req)
+	err := context.ShouldBindJSON(&req)
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		c.logger.Error("zero sensor id provided: " + err.Error())
@@ -58,7 +58,7 @@ func (c *Controller) MeasureGetHandler(context *gin.Context) {
 	}
 
 	if req.SensorID == 0 {
-		context.JSON(http.StatusBadRequest, gin.H{"error": "sensor_id is required"})
+		context.JSON(http.StatusBadRequest, gin.H{"error": "sensorID is required"})
 		c.logger.Error("zero sensor id provided")
 		return
 	}
