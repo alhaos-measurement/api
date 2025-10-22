@@ -59,7 +59,7 @@ func (c *Controller) lastMeasureByIDPOSTHandler(context *gin.Context) {
 		return
 	}
 
-	measure, err := c.repo.GetLastMeasure(req.SensorID)
+	measure, err := c.repo.GetLastMeasure(req.SensorID, req.MeasureTypeID)
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

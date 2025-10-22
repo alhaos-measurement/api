@@ -50,7 +50,7 @@ VALUES (
 	return nil
 }
 
-func (r *Repository) GetLastMeasure(sensorID int) (*model.MeasureView, error) {
+func (r *Repository) GetLastMeasure(sensorID int, measureTypeID int) (*model.MeasureView, error) {
 
 	const query = `
 SELECT s.name,
@@ -67,6 +67,7 @@ SELECT s.name,
            ROW_NUMBER() OVER (ORDER BY measured_at DESC) AS rn
       FROM measurements
      WHERE sensor_id = $1
+       AND unit_id = $2
   ) m
   JOIN measure_type mt 
     ON m.measure_type_id = mt.measure_type_id
@@ -75,7 +76,7 @@ SELECT s.name,
     ON m.unit_id = u.unit_id
   JOIN sensors s
     ON m.sensor_id = s.sensor_id`
-	row := r.pool.QueryRow(query, sensorID)
+	row := r.pool.QueryRow(query, sensorID, measureTypeID)
 
 	var m model.MeasureView
 
