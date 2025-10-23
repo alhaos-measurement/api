@@ -43,6 +43,30 @@ VALUES (
 		return err
 	}
 
+	const queryUpdate = `
+update measurements_current
+   set value = $1,
+       measured_at = now(),
+       unit_id = $2 
+ where sensor_id = $3
+   and measure_type_id = $4`
+
+	result, err := tx.Exec(query, measure.Value, measure.UnitID, measure.SensorID, measure.MeasureTypeID)
+	if err != nil {
+		return err
+	}
+
+	if result.RowsAffected() == 0 {
+		const queryInsert = `
+INSERT INTO measurements (sensor_id, measure_type_id, unit_id, value, measured_at)
+VALUES ( $1, $2, $3, $4, NOW())`
+
+		_, err = tx.Exec(queryInsert, measure.SensorID, measure.MeasureTypeID, measure.UnitID, measure.Value)
+		if err != nil {
+			return err
+		}
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		return err
