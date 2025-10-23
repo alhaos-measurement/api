@@ -53,6 +53,10 @@ update measurements_current
 
 	result, err := tx.Exec(queryUpdate, measure.Value, measure.UnitID, measure.SensorID, measure.MeasureTypeID)
 	if err != nil {
+		err = tx.Rollback()
+		if err != nil {
+			panic(err)
+		}
 		return err
 	}
 
@@ -63,6 +67,10 @@ VALUES ( $1, $2, $3, $4, NOW())`
 
 		_, err = tx.Exec(queryInsert, measure.SensorID, measure.MeasureTypeID, measure.UnitID, measure.Value)
 		if err != nil {
+			err = tx.Rollback()
+			if err != nil {
+				panic(err)
+			}
 			return err
 		}
 	}
