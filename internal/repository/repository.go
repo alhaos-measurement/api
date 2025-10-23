@@ -51,14 +51,14 @@ update measurements_current
  where sensor_id = $3
    and measure_type_id = $4`
 
-	result, err := tx.Exec(query, measure.Value, measure.UnitID, measure.SensorID, measure.MeasureTypeID)
+	result, err := tx.Exec(queryUpdate, measure.Value, measure.UnitID, measure.SensorID, measure.MeasureTypeID)
 	if err != nil {
 		return err
 	}
 
 	if result.RowsAffected() == 0 {
 		const queryInsert = `
-INSERT INTO measurements (sensor_id, measure_type_id, unit_id, value, measured_at)
+INSERT INTO measurements_current (sensor_id, measure_type_id, unit_id, value, measured_at)
 VALUES ( $1, $2, $3, $4, NOW())`
 
 		_, err = tx.Exec(queryInsert, measure.SensorID, measure.MeasureTypeID, measure.UnitID, measure.Value)
