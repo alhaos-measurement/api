@@ -83,23 +83,18 @@ SELECT s.name,
        m.value,
        m.measured_at
   FROM (
-    SELECT sensor_id,
-           measure_type_id,
-           unit_id,
-           value,
-           measured_at,
-           ROW_NUMBER() OVER (ORDER BY measured_at DESC) AS rn
-      FROM measurements
-     WHERE sensor_id = $1
+  	SELECT * 
+  	  FROM measurements_current
+  	 WHERE sensor_id = $1
        AND unit_id = $2
-  ) m
+ 	) m
   JOIN measure_type mt 
     ON m.measure_type_id = mt.measure_type_id
-   AND m.rn = 1
   JOIN units u 
     ON m.unit_id = u.unit_id
   JOIN sensors s
-    ON m.sensor_id = s.sensor_id`
+    ON m.sensor_id = s.sensor_id
+`
 	row := r.pool.QueryRow(query, sensorID, measureTypeID)
 
 	var m model.MeasureView
