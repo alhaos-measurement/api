@@ -125,6 +125,7 @@ func (r *Repository) Units() ([]model.Unit, error) {
 		return nil, err
 	}
 	defer rows.Close()
+
 	var units []model.Unit
 
 	for rows.Next() {
