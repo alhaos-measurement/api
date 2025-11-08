@@ -24,7 +24,12 @@ func (c *Controller) RegisterRoutes(router *gin.Engine) {
 	{
 		api.POST("/last-measure-by-id", c.lastMeasureByIDPOSTHandler)
 		api.POST("/measure", c.MeasurePostHandler)
+		info := api.Group("/info")
+		{
+			info.GET("/units", c.UnitsGetHandler)
+		}
 	}
+
 }
 
 // MeasurePostHandler read measure json
@@ -65,4 +70,17 @@ func (c *Controller) lastMeasureByIDPOSTHandler(context *gin.Context) {
 		return
 	}
 	context.JSON(http.StatusOK, measure)
+}
+
+// UnitsGetHandler returns all registered units
+func (c *Controller) UnitsGetHandler(context *gin.Context) {
+
+	units, err := c.repo.Units()
+
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, units)
 }

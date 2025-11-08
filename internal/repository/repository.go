@@ -114,3 +114,31 @@ SELECT s.name,
 
 	return &m, nil
 }
+
+// Units return all units from database
+func (r *Repository) Units() ([]model.Unit, error) {
+
+	const query = "SELECT unit_id, name FROM units"
+
+	rows, err := r.pool.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var units []model.Unit
+
+	for rows.Next() {
+		var u model.Unit
+		err := rows.Scan(&u.ID, &u.Name)
+		if err == nil {
+			return nil, err
+		}
+		units = append(units, u)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return units, nil
+}
