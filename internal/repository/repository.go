@@ -127,11 +127,11 @@ func (r *Repository) Units() ([]model.Unit, error) {
 	defer rows.Close()
 
 	var units []model.Unit
+	var u model.Unit
 
 	for rows.Next() {
-		var u model.Unit
 		err := rows.Scan(&u.ID, &u.Name)
-		if err == nil {
+		if err != nil {
 			return nil, err
 		}
 		units = append(units, u)
