@@ -24,6 +24,7 @@ func (c *Controller) RegisterRoutes(router *gin.Engine) {
 	{
 		api.POST("/last-measure-by-id", c.lastMeasureByIDPOSTHandler)
 		api.POST("/measure", c.MeasurePostHandler)
+		api.GET("/avg-pressure-hourly", c.AvgPressureHourlyController)
 		info := api.Group("/info")
 		{
 			info.GET("/units", c.UnitsGetHandler)
@@ -83,4 +84,15 @@ func (c *Controller) UnitsGetHandler(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, units)
+}
+
+func (c *Controller) AvgPressureHourlyController(context *gin.Context) {
+
+	data, err := c.repo.AvgPressureHourly()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	context.JSON(http.StatusOK, data)
 }

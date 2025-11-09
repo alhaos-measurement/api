@@ -4,6 +4,7 @@ import (
 	"github.com/alhaos-measurement/api/internal/logger"
 	"github.com/alhaos-measurement/api/internal/model"
 	"github.com/jackc/pgx"
+	"time"
 )
 
 type Repository struct {
@@ -142,4 +143,41 @@ func (r *Repository) Units() ([]model.Unit, error) {
 	}
 
 	return units, nil
+}
+
+// AvgPressureHourly
+// returns average pressure hourly last 12 hours
+func (r *Repository) AvgPressureHourly() ([]model.AvgMeasure, error) {
+
+	const query = "SELECT hour_bucket, avg FROM pressure_hourly_avg_12h"
+
+	rows, err := r.pool.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var hour_backet time.Time
+	var avg float64
+	var avgMeasureValues []model.AvgMeasure
+
+	for rows.Next() {
+		err := rows.Scan(&hour_backet, &avg)
+		if err != nil {
+			return nil, err
+		}
+		avgPressure := model.AvgMeasure{
+			Start: hour_backet,
+			End:   hour_backet.Add(time.Hour),
+			Value: avg,
+		}
+		avgMeasureValues = append(avgMeasureValues, avgPressure)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return avgMeasureValues, nil
 }

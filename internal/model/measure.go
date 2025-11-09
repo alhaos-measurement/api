@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type Measure struct {
 	SensorID      int       `json:"sensorID"`
@@ -16,4 +18,10 @@ type MeasureView struct {
 	UnitName    string    `json:"unitName"`
 	Value       float64   `json:"value"`
 	MeasuredAt  time.Time `json:"measuredAt,omitempty"`
+}
+
+type AvgMeasure struct {
+	Start time.Time `json:"start"`
+	End   time.Time `json:"end"`
+	Value float64   `json:"value"`
 }
