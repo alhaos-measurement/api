@@ -181,3 +181,12 @@ func (r *Repository) AvgPressureHourly() ([]model.AvgMeasure, error) {
 
 	return avgMeasureValues, nil
 }
+
+// PurgeOldMeasurements purge table measurements
+func (r *Repository) PurgeOldMeasurements() {
+
+	const query = "DELETE FROM measurements WHERE measured_at < date_trunc('day', NOW()) - INTERVAL '7 days';"
+
+	_, _ = r.pool.Exec(query)
+
+}

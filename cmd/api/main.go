@@ -7,6 +7,7 @@ import (
 	"github.com/alhaos-measurement/api/internal/controller"
 	"github.com/alhaos-measurement/api/internal/logger"
 	"github.com/alhaos-measurement/api/internal/repository"
+	"github.com/alhaos-measurement/api/internal/taskScheduler"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx"
 )
@@ -50,6 +51,17 @@ func main() {
 
 	// Init repository
 	repo := repository.New(pool, l)
+
+	// tasks
+	var tasks []taskScheduler.Task
+
+	// purgeTask
+	purgeTask := taskScheduler.NewTask(repo.PurgeOldMeasurements)
+	tasks = append(tasks, purgeTask)
+
+	// Init taskScheduler
+	scheduler := taskScheduler.NewTaskScheduler(tasks)
+	scheduler.Run()
 
 	// Init controller
 	ctrl := controller.New(repo, l)
