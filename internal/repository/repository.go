@@ -95,7 +95,7 @@ SELECT s.name,
   	SELECT * 
   	  FROM measurements_current
   	 WHERE sensor_id = $1
-       AND unit_id = $2
+       AND measure_type_id = $2
  	) m
   JOIN measure_type mt 
     ON m.measure_type_id = mt.measure_type_id
